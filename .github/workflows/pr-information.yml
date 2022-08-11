@@ -2,8 +2,6 @@ name: PR Information
 
 on:
   pull_request:
-    types:
-      - "opened"
     branches: ['*']
 
 jobs:
@@ -11,4 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Hello There."
+          export RESULT=$(curl 'https://api.open-meteo.com/v1/forecast?latitude=24.864949&longitude=46.718843&current_weather=true') 
+          export TEMP=$(echo $RESULT | jq '.current_weather.temperature')
+          gh pr comment $PR_NUMBER --body "This was run by $AUTHOR and the weather right now in Riyadh is: $TEMP" --repo $GITHUB_REPOSITORY
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTHOR: ${{ github.actor }}

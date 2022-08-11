@@ -1,0 +1,14 @@
+name: PR Information
+
+on:
+  pull_request:
+    types:
+      - "opened"
+    branches: ['*']
+
+jobs:
+  print-pr-information:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Hello There."
